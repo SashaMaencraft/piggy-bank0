@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Статус базы данных · копилка</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0c14;
+            color: #f0f4fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(20, 24, 32, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px;
+            border: 2px solid #8f7aff;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+            padding: 32px;
+            color: #f0f4fa;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #2f3b54;
+            padding-bottom: 20px;
+        }
+
+        .header i {
+            font-size: 2.5rem;
+            color: #8f7aff;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #572a34;
+            color: #ffcaca;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid #ff8a8a;
+        }
+
+        .status-badge i {
+            margin-right: 8px;
+        }
+
+        .info-box {
+            background: #1a1f2e;
+            border-radius: 20px;
+            padding: 24px;
+            margin: 24px 0;
+            border: 2px solid #4a6085;
+        }
+
+        .info-box h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #8f7aff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #2f3b54;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #8f9bb8;
+            font-size: 1rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .status-red {
+            color: #ff8a8a;
+        }
+
+        .status-green {
+            color: #2e8b6b;
+        }
+
+        .status-yellow {
+            color: #ffd966;
+        }
+
+        .badge-tag {
+            background: #2a3850;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .warning-message {
+            background: #572a34;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #ff8a8a;
+        }
+
+        .warning-message h3 {
+            color: #ffcaca;
+            margin-bottom: 12px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: #1e2538;
+            padding: 16px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .feature-card i {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .feature-card .title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .feature-card .desc {
+            font-size: 0.85rem;
+            color: #8f9bb8;
+        }
+
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #8f7aff;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 30px;
+            background: #2b3850;
+            display: inline-block;
+            transition: 0.2s;
+        }
+
+        .footer a:hover {
+            background: #364a6b;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 1.4rem;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <i class="fas fa-database"></i>
+                <h1>Статус базы данных</h1>
+            </div>
+
+            <!-- СТАТУС -->
+            <div style="text-align: center; margin-bottom: 24px;">
+                <span class="status-badge"><i class="fas fa-exclamation-triangle"></i> БАЗА ДАННЫХ ОТСУТСТВУЕТ</span>
+            </div>
+
+            <!-- ОСНОВНАЯ ИНФОРМАЦИЯ -->
+            <div class="info-box">
+                <h2><i class="fas fa-info-circle"></i> Текущее состояние</h2>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-server" style="width: 24px;"></i> Серверная БД:</span>
+                    <span class="info-value status-red"><i class="fas fa-times-circle"></i> Не подключена</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-database" style="width: 24px;"></i> Тип хранения:</span>
+                    <span class="info-value status-yellow"><i class="fas fa-check-circle"></i> localStorage (браузер)</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-cloud-upload-alt" style="width: 24px;"></i> Синхронизация:</span>
+                    <span class="info-value status-red"><i class="fas fa-times-circle"></i> Отсутствует</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-history" style="width: 24px;"></i> Резервное копирование:</span>
+                    <span class="info-value status-red"><i class="fas fa-times-circle"></i> Не выполняется</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-users" style="width: 24px;"></i> Доступ к данным:</span>
+                    <span class="info-value status-green"><i class="fas fa-check-circle"></i> Только локально</span>
+                </div>
+            </div>
+
+            <!-- ПРЕДУПРЕЖДЕНИЕ -->
+            <div class="warning-message">
+                <h3><i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i> Важная информация</h3>
+                <p>В настоящий момент проект работает в <strong>демонстрационном режиме</strong> без подключения к серверной базе данных.</p>
+                <p style="margin-top: 12px;"><strong>Это означает:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>✓ Все данные хранятся только в вашем браузере</li>
+                    <li>✓ При очистке localStorage данные будут безвозвратно удалены</li>
+                    <li>✓ Вход с другого устройства не даст доступа к данным</li>
+                    <li>✓ Администратор видит данные только в админ-панели (локально)</li>
+                </ul>
+            </div>
+
+            <!-- КАК ЭТО РАБОТАЕТ -->
+            <div style="margin: 24px 0;">
+                <h2 style="font-size: 1.2rem; margin-bottom: 16px;"><i class="fas fa-cog" style="color: #8f7aff; margin-right: 8px;"></i> Как работает хранение:</h2>
+                
+                <div class="grid-2">
+                    <div class="feature-card">
+                        <i class="fas fa-save" style="color: #6d94ff;"></i>
+                        <div class="title">Сохранение</div>
+                        <div class="desc">Данные пишутся в localStorage браузера</div>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-eye" style="color: #6d94ff;"></i>
+                        <div class="title">Доступ</div>
+                        <div class="desc">Только текущий браузер имеет доступ</div>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-sync-alt" style="color: #ff8a8a;"></i>
+                        <div class="title">Синхронизация</div>
+                        <div class="desc">Не поддерживается между устройствами</div>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-trash-alt" style="color: #ff8a8a;"></i>
+                        <div class="title">Удаление</div>
+                        <div class="desc">При очистке браузера данные пропадают</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ПЛАНЫ ПО РАЗВИТИЮ -->
+            <div class="info-box" style="border-color: #8f7aff;">
+                <h2><i class="fas fa-road"></i> Планы по развитию</h2>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-database"></i> Подключение PostgreSQL:</span>
+                    <span class="info-value status-yellow">В планах</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-cloud"></i> Облачная синхронизация:</span>
+                    <span class="info-value status-yellow">В разработке</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-mobile-alt"></i> Мобильное приложение:</span>
+                    <span class="info-value status-red">Не планируется</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-lock"></i> Шифрование данных:</span>
+                    <span class="info-value status-green">Реализовано (base64)</span>
+                </div>
+            </div>
+
+            <!-- РЕКОМЕНДАЦИИ -->
+            <div style="background: #1e2a3a; border-radius: 16px; padding: 20px; margin: 20px 0;">
+                <h3 style="color: #8f7aff; margin-bottom: 12px;"><i class="fas fa-lightbulb"></i> Рекомендации:</h3>
+                <ul style="list-style: none;">
+                    <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: #2e8b6b; margin-right: 8px;"></i> Регулярно экспортируйте важные данные</li>
+                    <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: #2e8b6b; margin-right: 8px;"></i> Используйте один браузер для доступа</li>
+                    <li style="margin-bottom: 10px;"><i class="fas fa-exclamation-circle" style="color: #ff8a8a; margin-right: 8px;"></i> Не очищайте localStorage без резервной копии</li>
+                    <li style="margin-bottom: 10px;"><i class="fas fa-exclamation-circle" style="color: #ff8a8a; margin-right: 8px;"></i> Не используйте критически важные данные</li>
+                </ul>
+            </div>
+
+            <!-- ДОПОЛНИТЕЛЬНО -->
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 20px 0;">
+                <span class="badge-tag"><i class="fas fa-database"></i> localStorage</span>
+                <span class="badge-tag"><i class="fas fa-times"></i> no SQL</span>
+                <span class="badge-tag"><i class="fas fa-clock"></i> demo mode</span>
+                <span class="badge-tag"><i class="fas fa-shield-alt"></i> client-side</span>
+            </div>
+
+            <!-- КНОПКИ -->
+            <div class="footer">
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <a href="policy.html" style="background: #1d4a3a; border-color: #2e8b6b;"><i class="fas fa-shield-alt"></i> Политика</a>
+                    <a href="/" onclick="history.back(); return false;"><i class="fas fa-arrow-left"></i> На главную</a>
+                </div>
+                <p style="margin-top: 20px; font-size: 0.8rem; color: #8f9bb8;">kapilka0.sa2rn.fun · Временное решение без БД</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
